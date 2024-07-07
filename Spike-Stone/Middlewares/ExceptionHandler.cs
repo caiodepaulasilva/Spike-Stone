@@ -1,7 +1,7 @@
 ﻿using Domain.Exceptions;
 using System.Net;
 
-namespace Spike_CasasBahia.Middlewares
+namespace Spike_Stone.Middlewares
 {
     public class ExceptionHandler
     {

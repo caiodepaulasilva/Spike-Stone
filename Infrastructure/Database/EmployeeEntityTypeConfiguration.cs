@@ -15,7 +15,7 @@ public class EmployeeEntityTypeConfiguration : IEntityTypeConfiguration<Employee
         builder.Property(p => p.SalarioBruto).IsRequired().HasPrecision(10, 2);
         builder.Property(p => p.DataAdmissao).IsRequired();
         builder.Property(p => p.DescontoPlanoSaude).IsRequired();
-        builder.Property(p => p.DescontoPlanoDentral).IsRequired();
+        builder.Property(p => p.DescontoPlanoDental).IsRequired();
         builder.Property(p => p.DescontoValeTransporte).IsRequired();
     }
 }
