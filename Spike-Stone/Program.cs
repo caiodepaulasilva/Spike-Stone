@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Infrastructure.Database;
 using Spike_Stone.Controllers;
 
 public class Program
@@ -7,11 +8,11 @@ public class Program
     {
         var host = CreateHostBuilder(args).Build();
 
-        using (var scope = host.Services.CreateScope())
-        {
-            //var db = scope.ServiceProvider.GetRequiredService<SQLDBContext>();
-            //db.Database.Migrate();
-        }
+        //using (var scope = host.Services.CreateScope())
+        //{
+        //    var db = scope.ServiceProvider.GetRequiredService<SQLDBContext>();
+        //    db.Database.Migrate();
+        //}
 
         host.Run();
     }
