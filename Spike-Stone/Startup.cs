@@ -1,13 +1,15 @@
-using Application.Services;
 using Domain;
-using Domain.Services;
 using Infrastructure;
+using Domain.Services;
+using Application.Services;
+using Spike_Stone.Validators;
+using Spike_Stone.Middlewares;
 using Infrastructure.Database;
-using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Spike_CasasBahia.Middlewares;
-
+using Infrastructure.Repositories;
+using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace Spike_Stone.Controllers
 {
@@ -18,8 +20,10 @@ namespace Spike_Stone.Controllers
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
-            services.AddControllers();
-
+            services.AddControllers().AddJsonOptions(opt =>
+            {                
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
             services.AddDbContext<SQLDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -35,6 +39,7 @@ namespace Spike_Stone.Controllers
 
             services.AddScoped<IPayrollService, PayrollService>();
             services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
             services.AddControllers();
 
@@ -50,7 +55,6 @@ namespace Spike_Stone.Controllers
                     Description = "Insira o token JWT dessa maneira: Bearer {seu token}",
 
                 });
-
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement()
                 {
                     {
@@ -68,7 +72,11 @@ namespace Spike_Stone.Controllers
                         new List<string>()
                     }
                 });
+                c.SchemaFilter<ExampleSchema>();
             });
+
+            services.AddFluentValidationAutoValidation();
+            services.AddRouting(options => options.LowercaseUrls = true);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
