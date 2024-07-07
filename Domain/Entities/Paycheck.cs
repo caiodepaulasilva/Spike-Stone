@@ -4,7 +4,7 @@ namespace Domain.Entities;
 
 public class Paycheck
 {
-    public DateOnly MesReferencia { get; set; }
+    public DateTime MesReferencia { get; set; }
 
     public IEnumerable<Lancamento> Lancamentos { get; set; }
 

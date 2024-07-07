@@ -27,18 +27,7 @@ namespace Spike_Stone.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> Get([FromQuery] int id)
         {
-            //var result = await _payrollService.GetProduct(id);
-            var result = new { };
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Get()
-        {
-            //var result = await _payrollService.GetProducts();
-            var result = new { };
+            var result = await _employeeService.GetEmployee(id);
             return Ok(result);
         }
     }

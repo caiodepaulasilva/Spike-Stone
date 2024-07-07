@@ -8,7 +8,19 @@ public class Lancamento
 
     public decimal Valor { get; set; }
 
-    public string? Descricao { get; set; }    
+    public string? Descricao { get; set; }
+
+    public Lancamento()
+    {
+
+    }
+
+    public Lancamento(TipoLancamento tipo, decimal valor, string? descricao)
+    {
+        Tipo = tipo;
+        Valor = valor;
+        Descricao = descricao;        
+    }
 }
 
 

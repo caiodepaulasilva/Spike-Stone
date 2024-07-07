@@ -1,19 +1,16 @@
-﻿using Domain;
-using Domain.Entities;
-using Domain.Exceptions;
+﻿using Domain.Entities;
 using Domain.Services;
 
 namespace Application.Services
 {
-    public class PayrollService(IUnitOfWork unitOfWork, IDiscountService discountService, IEmployeeService employeeService) : IPayrollService
-    {
-        private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    public class PayrollService(IDiscountService discountService, IEmployeeService employeeService) : IPayrollService
+    {        
         private readonly IEmployeeService _employeeService = employeeService;
         private readonly IDiscountService _discountService = discountService;
 
-        public async Task<Paycheck> GetPayCheck(int id, DateOnly date)
+        public async Task<Paycheck> GetPayCheck(int id, DateTime date)
         {
-            List<Lancamento> lancamentos = [ new Lancamento{ }];
+            List<Lancamento> lancamentos = [ ];
 
             decimal discountTotal = 0.00M;
             decimal discountINSS;
@@ -24,80 +21,42 @@ namespace Application.Services
             decimal discountValeTransporte;
 
             Employee employee = await _employeeService.GetEmployee(id);
-
-            lancamentos.Add(new Lancamento()
-            {
-                Tipo = Domain.Enum.TipoLancamento.Remuneracao,
-                Valor = employee.SalarioBruto,
-                Descricao = "Remuneração"
-            });
+            lancamentos.Add(new (Domain.Enum.TipoLancamento.Remuneracao, employee.SalarioBruto, "Remuneração"));
 
             discountTotal += discountINSS = _discountService.INSS(employee.SalarioBruto);
-            lancamentos.Add(new Lancamento()
-            {
-                Tipo = Domain.Enum.TipoLancamento.Desconto,
-                Valor = discountINSS,
-                Descricao = "INSS"
-            });
+            lancamentos.Add(new (Domain.Enum.TipoLancamento.Desconto, discountINSS, "INSS"));
 
             discountTotal += discountIRPF = _discountService.IRPF(employee.SalarioBruto);
-            lancamentos.Add(new Lancamento()
-            {
-                Tipo = Domain.Enum.TipoLancamento.Desconto,
-                Valor = discountIRPF,
-                Descricao = "IRPF"
-            });
+            lancamentos.Add(new (Domain.Enum.TipoLancamento.Desconto, discountIRPF, "IRPF"));
 
             discountTotal += discountFGTS = _discountService.FGTS(employee.SalarioBruto);
-            lancamentos.Add(new Lancamento()
-            {
-                Tipo = Domain.Enum.TipoLancamento.Desconto,
-                Valor = discountFGTS,
-                Descricao = "FGTS"
-            });
+            lancamentos.Add(new (Domain.Enum.TipoLancamento.Desconto, discountFGTS, "FGTS"));
 
             if (employee.DescontoPlanoSaude)
             {
                 discountTotal += discountPlanoSaude = _discountService.PlanoSaude(employee.SalarioBruto);
-                lancamentos.Add(new Lancamento()
-                {
-                    Tipo = Domain.Enum.TipoLancamento.Desconto,
-                    Valor = discountPlanoSaude,
-                    Descricao = "Plano de Saúde"
-                });
+                lancamentos.Add(new (Domain.Enum.TipoLancamento.Desconto, discountPlanoSaude, "Plano de Saúde"));
             }
 
             if (employee.DescontoPlanoDental)
             {
                 discountTotal += discountPlanoDental = _discountService.PlanoDental(employee.SalarioBruto);
-                lancamentos.Add(new Lancamento()
-                {
-                    Tipo = Domain.Enum.TipoLancamento.Desconto,
-                    Valor = discountPlanoDental,
-                    Descricao = "Plano de Dental"
-                });
+                lancamentos.Add(new (Domain.Enum.TipoLancamento.Desconto, discountPlanoDental, "Plano de Dental"));
             }
 
             if (employee.DescontoValeTransporte)
             {
                 discountTotal += discountValeTransporte = _discountService.ValeTransporte(employee.SalarioBruto);
-                lancamentos.Add(new Lancamento()
-                {
-                    Tipo = Domain.Enum.TipoLancamento.Desconto,
-                    Valor = discountValeTransporte,
-                    Descricao = "Vale Transporte"
-                });
-            }                       
-
-            var netPay = employee.SalarioBruto - discountTotal;
+                lancamentos.Add(new (Domain.Enum.TipoLancamento.Desconto, discountValeTransporte, "Vale Transporte"));
+            }                                   
 
             return new Paycheck()
             {
                 MesReferencia = date,
                 Lancamentos = lancamentos,
-                SalarioBruto = employee.SalarioBruto,
                 TotalDescontos = discountTotal,
-                SalarioLiquido = netPay
+                SalarioBruto = employee.SalarioBruto,
+                SalarioLiquido = employee.SalarioBruto - discountTotal
             };
         }
     }

@@ -20,6 +20,6 @@ public class Employee : BaseEntity
 
     public bool DescontoValeTransporte { get; set; }
 
-    public DateOnly DataAdmissao { get; set; }
+    public DateTime DataAdmissao { get; set; }
 }
 
