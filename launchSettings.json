@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "Docker Compose": {
+      "commandName": "DockerCompose",
+      "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "spike-stone",      
+      "serviceActions": {
+        "spike-stone": "StartDebugging",
+        "sql-server-db": "StartWithoutDebugging"
+      }
+    }
+  }
+}
