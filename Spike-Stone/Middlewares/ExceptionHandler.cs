@@ -3,14 +3,9 @@ using System.Net;
 
 namespace Spike_Stone.Middlewares
 {
-    public class ExceptionHandler
+    public class ExceptionHandler(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
-
-        public ExceptionHandler(RequestDelegate next)
-        {
-            _next = next;
-        }
+        private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext httpContext)
         {
@@ -38,8 +33,7 @@ namespace Spike_Stone.Middlewares
 
         public HttpStatusCode GetStatusCode(Exception exception)
         {
-            var internalException = exception as BaseException;
-            if (internalException == null)
+            if (exception is not BaseException internalException)
             {
                 return HttpStatusCode.InternalServerError;
             }

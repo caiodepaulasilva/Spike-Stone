@@ -3,13 +3,15 @@ using Infrastructure;
 using Domain.Services;
 using Application.Services;
 using Spike_Stone.Validators;
-using Spike_Stone.Middlewares;
 using Infrastructure.Database;
+using Spike_Stone.Middlewares;
 using Microsoft.OpenApi.Models;
 using Infrastructure.Repositories;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using FluentValidation;
+using Domain.Entities;
 
 namespace Spike_Stone.Controllers
 {
@@ -21,13 +23,15 @@ namespace Spike_Stone.Controllers
         {
             services.AddHttpContextAccessor();
             services.AddControllers().AddJsonOptions(opt =>
-            {                
+            {
                 opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                opt.JsonSerializerOptions.PropertyNamingPolicy = null;
             });
+
             services.AddDbContext<SQLDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>(f =>
+            _ = services.AddScoped<IUnitOfWork, UnitOfWork>(f =>
             {
                 var scopeFactory = f.GetRequiredService<IServiceScopeFactory>();
                 var context = f.GetService<SQLDBContext>();
@@ -41,37 +45,12 @@ namespace Spike_Stone.Controllers
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<IEmployeeService, EmployeeService>();
 
+            services.AddScoped<IValidator<Employee>, EmployeeValidator>();
+
             services.AddControllers();
 
             services.AddSwaggerGen(c =>
             {
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT",
-                    Description = "Insira o token JWT dessa maneira: Bearer {seu token}",
-
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "apiKey",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
-                        },
-                        new List<string>()
-                    }
-                });
                 c.SchemaFilter<ExampleSchema>();
             });
 
