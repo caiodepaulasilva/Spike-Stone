@@ -11,9 +11,6 @@ namespace Infrastructure
 
         public async Task<int> SaveAsync() => await _SQLDBContext.SaveChangesAsync();
 
-        public void Dispose()
-        {
-            _SQLDBContext.Dispose();
-        }
+        public void Dispose() => _SQLDBContext.Dispose();
     }
 }

@@ -6,11 +6,9 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Repositories;
 
-public class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+public class Repository<TEntity>(DbSet<TEntity> entities) : IRepository<TEntity> where TEntity : BaseEntity
 {
-    protected readonly DbSet<TEntity> _entities;
-
-    public Repository(DbSet<TEntity> entities) => _entities = entities;
+    protected readonly DbSet<TEntity> _entities = entities;
 
     public async Task AddAsync(TEntity entity) => await _entities.AddAsync(entity);
     public async Task UpdateAsync(TEntity entity) => await Task.Run(() => { _entities.Update(entity); });
