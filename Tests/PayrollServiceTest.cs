@@ -22,9 +22,7 @@ namespace Tests
                 SalarioBruto = 8000.00M,
                 Setor = Domain.Enum.Setor.Engenharia,
                 DataAdmissao = DateTime.Now,
-            };
-
-            var referenceMonth = DateTime.Now;
+            };            
 
             var employeeServiceMock = new Mock<IEmployeeService>();
             employeeServiceMock.Setup(employee => employee.GetEmployee(It.IsAny<int>())).ReturnsAsync(employee);            
@@ -38,7 +36,7 @@ namespace Tests
             discountServiceMock.Setup(discount => discount.ValeTransporte(It.IsAny<decimal>())).Returns(It.IsAny<decimal>());
 
             var payRollService = new PayrollService(discountServiceMock.Object, employeeServiceMock.Object);
-            var result = await payRollService.GetPayCheck(employee.Id, referenceMonth);            
+            var result = await payRollService.GetPayCheck(employee.Id);            
 
             discountServiceMock.Verify(discount => discount.INSS(It.IsAny<decimal>()), Times.Once());
             discountServiceMock.Verify(discount => discount.IRPF(It.IsAny<decimal>()), Times.Once());
@@ -48,8 +46,7 @@ namespace Tests
             discountServiceMock.Verify(discount => discount.ValeTransporte(It.IsAny<decimal>()), employee.DescontoValeTransporte? Times.Once() : Times.Never());
 
             Assert.NotNull(result);
-            Assert.Equal(expected: employee.SalarioBruto, actual: result.SalarioBruto);
-            Assert.Equal(expected: referenceMonth, actual: result.MesReferencia);
+            Assert.Equal(expected: employee.SalarioBruto, actual: result.SalarioBruto);            
         }    
     }
 }
