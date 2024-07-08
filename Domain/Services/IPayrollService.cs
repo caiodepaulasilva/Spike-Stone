@@ -4,5 +4,5 @@ namespace Domain.Services;
 
 public interface IPayrollService
 {
-    Task<Paycheck> GetPayCheck(int id, DateTime date);
+    Task<Paycheck> GetPayCheck(int employeeId);
 }

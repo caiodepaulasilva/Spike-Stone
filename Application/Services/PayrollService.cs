@@ -8,7 +8,7 @@ namespace Application.Services
         private readonly IEmployeeService _employeeService = employeeService;
         private readonly IDiscountService _discountService = discountService;
 
-        public async Task<Paycheck> GetPayCheck(int id, DateTime date)
+        public async Task<Paycheck> GetPayCheck(int employeeId)
         {
             List<Lancamento> lancamentos = [ ];
 
@@ -20,7 +20,7 @@ namespace Application.Services
             decimal discountPlanoDental;
             decimal discountValeTransporte;
 
-            Employee employee = await _employeeService.GetEmployee(id);
+            Employee employee = await _employeeService.GetEmployee(employeeId);
             lancamentos.Add(new (Domain.Enum.TipoLancamento.Remuneracao, employee.SalarioBruto, "Remuneração"));
 
             discountTotal += discountINSS = _discountService.INSS(employee.SalarioBruto);
@@ -52,7 +52,7 @@ namespace Application.Services
 
             return new Paycheck()
             {
-                MesReferencia = date,
+                MesReferencia = employee.DataAdmissao,
                 Lancamentos = lancamentos,
                 TotalDescontos = discountTotal,
                 SalarioBruto = employee.SalarioBruto,

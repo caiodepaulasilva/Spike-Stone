@@ -11,12 +11,12 @@ namespace Spike_Stone.Controllers
     {
         private readonly IPayrollService _payrollService = payrollService;        
 
-        [HttpGet("id")]
+        [HttpGet("employeeId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<IActionResult> Get([FromQuery] int id, DateTime date)
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Get([FromQuery] int employeeId)
         {
-            var result = await _payrollService.GetPayCheck(id, date);            
+            var result = await _payrollService.GetPayCheck(employeeId);            
             return Ok(result);
         }
     }
