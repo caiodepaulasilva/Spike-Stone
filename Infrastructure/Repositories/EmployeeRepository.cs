@@ -4,10 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class EmployeeRepository : Repository<Employee>, IEmployeeRepository
+    public class EmployeeRepository(DbSet<Employee> employee) : Repository<Employee>(employee), IEmployeeRepository
     {
-        public EmployeeRepository(DbSet<Employee> employee) : base(employee)
-        {
-        }
     }
 }

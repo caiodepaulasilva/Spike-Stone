@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using Domain.Enum;
 using FluentValidation;
 
 namespace Spike_Stone.Validators
@@ -19,7 +18,7 @@ namespace Spike_Stone.Validators
                 if (j.ToString().PadLeft(11, char.Parse(j.ToString())) == cpf)
                     return false;
 
-            string tempCpf = cpf.Substring(0, 9);
+            string tempCpf = cpf[..9];
             int soma = 0;
 
             for (int i = 0; i < 9; i++)
@@ -63,12 +62,13 @@ namespace Spike_Stone.Validators
             RuleFor(employee => employee.Documento)
                 .NotNull()
                 .NotEmpty()
-                .Must(IsCpf);
+                .Must(IsCpf)
+                .Matches(@"([0-9]{2}[\.][0-9]{3}[\.][0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.][0-9]{3}[\.][0-9]{3}[-][0-9]{2})").WithMessage("Documento CPF está fora do padrão esperado.");
 
-            //RuleFor(employee => employee.Setor)
-                //.NotNull()
-                //.NotEmpty();
-                //.IsInEnum();
+            RuleFor(employee => employee.Setor)
+                .NotNull()
+                .NotEmpty()
+                .IsInEnum();
 
             RuleFor(employee => employee.SalarioBruto)
                 .NotNull()
@@ -78,21 +78,15 @@ namespace Spike_Stone.Validators
             RuleFor(employee => employee.DataAdmissao)
                 .NotNull()
                 .NotEmpty()
-                .Must(data => data.GetType() == typeof(DateOnly));
+                .Must(data => data.GetType() == typeof(DateTime));
 
             RuleFor(employee => employee.DescontoPlanoSaude)
-                .NotNull()
-                .NotEmpty()
                 .Must(data => data.GetType() == typeof(bool));
 
-            RuleFor(employee => employee.DescontoPlanoDental)
-                .NotNull()
-                .NotEmpty()
+            RuleFor(employee => employee.DescontoPlanoDental)                
                 .Must(data => data.GetType() == typeof(bool));
 
-            RuleFor(employee => employee.DescontoValeTransporte)
-                .NotNull()
-                .NotEmpty()
+            RuleFor(employee => employee.DescontoValeTransporte)                
                 .Must(data => data.GetType() == typeof(bool));
         }
     }
