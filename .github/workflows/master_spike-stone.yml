@@ -31,7 +31,7 @@ jobs:
       with:
         push: true
         tags: registrystone.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_480e272c7f804debbdb2b12e0b46ec36 }}/teste:${{ github.sha }}
-        file: ./Dockerfile
+        file: ./Spike-Stone/Dockerfile
 
   deploy:
     runs-on: ubuntu-latest
