@@ -4,11 +4,11 @@
       "serviceConnectorResourceId": "",
       "containerPorts": "1433:1433",
       "secretStore": "LocalSecretsFile",
-      "containerName": "sql-server-db",
-      "containerImage": "mcr.microsoft.com/mssql/server:2022-latest",
+      "containerName": "mssql",
+      "containerImage": "mcr.microsoft.com/mssql/server:2019-latest",
+      "resourceId": null,
       "type": "mssql.container",
-      "connectionId": "ConnectionStrings:DefaultConnection",
-      "dynamicId": null
+      "connectionId": "ConnectionStrings:DefaultConnection"
     }
   }
 }
