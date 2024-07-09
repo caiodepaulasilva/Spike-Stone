@@ -34,8 +34,12 @@ O projeto tem uma construção parcialmente simples e, portanto, são necessári
 - Docker Desktop
 - IIS Express
 
+## Orientações:
+> [!WARNING]  
+> A solução publicada em ambiente de produção não está funcionando no momento. Sendo assim, na impossibilidade de consumir a solução através do [aplicativo publicado](https://spike-stone-container-app.livelysea-8a61b06e.eastus.azurecontainerapps.io), realize os passos mencionados no tópico de **execução** para validar o funcionamento da solução localmente. 
+
 ## Execução
-O projeto necessita que duas dependências diretas sejam consideradas antes de sua execução. A configuração de um servidor **SQL Server**, que uma vez configurado, a execução da API se tornar então possível. Segue passo-a-passo de como configura-los:
+O projeto e suas dependências podem ser configurados de uma única vez através de um comando que executa a criação do containers. Segue passo-a-passo de como configura-los:
 
 **Clonar o projeto:**
 ```
@@ -43,12 +47,11 @@ cd "diretorio de sua preferencia"
 git clone https://github.com/caiodepaulasilva/Spike-Stone.git
 ```
 
-**Criar Container SQL Server:**
-1. Abra o arquivo docker-compose.yaml e defina uma senha para o servidor, através da variável *"SA_PASSWORD"*
+**Criação dos Containers:**
+1. Abra o arquivo docker-compose.yaml e defina uma senha para o servidor, através da variável *"MSSQL_SA_PASSWORD"*
 2. Uma vez no Visual Studio, no terminal PowerShell do Desenvolvedor, na raiz do projeto, digite:
 ```
-cd "Infrastructure\Dependencies\SQL Server"
-docker-compose up -d
+docker-compose  -f "docker-compose.yml" -p "solution-spike-stone" --ansi never up -d --build --remove-orphans  spike-stone sql-server-db
 ```
 3. Verifique o bom funcionamento através do Docker Desktop. Os containers devem ter sido criados com sucesso e estarão em execução.
 4. Verifique se é possível estabelcer conexão com o servidor. Para isso tente realizar a conexão através do SQL Server Managament Studio da seguinte maneira:
@@ -56,19 +59,21 @@ docker-compose up -d
 | Campo do Formulário de Conexão | Valor                               |
 | ------------------------------ | ----------------------------------- |
 | Server Type                    | Database Engine                     |
-| Server Name                    | localhost                           |
+| Server Name                    | localhost,1433                      |
 | Authentication                 | SQL Server Authentication           |
 | Login                          | sa                                  |
-| Password                       | <SA_PASSWORD> (docker-compose.yaml) |
+| Password                       | <MSSQL_SA_PASSWORD> (docker-compose.yaml) |
 | Trust server certificate       | checked                             |
 
 **Criar a estrutura da base de dados:**
-2. Uma vez no Visual Studio, no terminal PowerShell do Desenvolvedor, na raiz do projeto, digite:
+1. Uma vez no Visual Studio, no terminal PowerShell do Desenvolvedor, na raiz do projeto, digite:
 ```
 dotnet clean
 dotnet ef migrations add InitialCreate --project Infrastructure --startup-project Spike-Stone
 ```
-Após a execução destas instrunções, deve ser possível executar o projeto normalmente.
+**Acessar a solução:**
+
+Após realizar essas instruções, deve ser possível consumir a solução normalmente. Para isso, acesse: http://localhost:5000/swagger/index.html
 
 ## Licença
 
