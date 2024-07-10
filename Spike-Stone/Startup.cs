@@ -29,7 +29,7 @@ namespace Spike_Stone.Controllers
             });
 
             services.AddDbContext<SQLDBContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection2")));
 
             _ = services.AddScoped<IUnitOfWork, UnitOfWork>(f =>
             {
