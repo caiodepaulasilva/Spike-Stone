@@ -74,7 +74,7 @@ dotnet ef migrations add InitialCreate --project Infrastructure --startup-projec
 ```
 **Acessar a solução:**
 <br><br>
-Após realizar essas instruções, deve ser possível consumir a solução normalmente. Para isso, acesse: [localhost:{port}/swagger/index.html](https://localhost:7047/swagger/index.html)
+Após realizar essas instruções, deve ser possível consumir a solução normalmente. Para isso, acesse: [localhost:5000/swagger/index.html](http://localhost:5000/swagger/index.html)
 
 ## Licença
 
