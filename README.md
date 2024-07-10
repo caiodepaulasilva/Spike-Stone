@@ -7,15 +7,17 @@
   <img src="https://img.shields.io/badge/c%23-%23239120.svg?style=for-the-badge&logo=c-sharp&logoColor=white"/>    
 </p>
 
+
 ## Introdução
 
 Este trabalho foi desenvolvido como parte de um processo seletivo no qual o objetivo é construir um projeto de desenvolvimento web em que algumas habilidades possam ser exercitadas. Sendo estas:
-- Domínio da construção de uma API baseada na arquitetura de Domain-Driven-Design
+- Domínio da construção de uma API
 - Domínio de capacidade de escrever uma documentação razoável
 - Domínio de construção de projeto apoiado em boas práticas
-- Domínio de uso de Docker para criação de instâncias
+- Domínio de conteinerização com o uso de docker
+- Domínio de integração com alguma base de dados
+- Domínio de integração com servico de CI e uso de Github Actions
 - Domínio da construção de testes unitários
-- Domínio de integração com SQL Server
 - Domínio do framework .NET 8.0
 - Domínio da capacidade analítica, de abstração e de construção de um algoritmo que reflita as boas práticas de programação e o uso razoável da linguagem C# para construção de APIs.
 
@@ -25,7 +27,7 @@ Este trabalho foi desenvolvido como parte de um processo seletivo no qual o obje
 
 ## Requerimentos
 
-O projeto tem uma construção parcialmente simples e, portanto, são necessárias apenas algumas poucas dependências para a sua execução. São esperados os seguintes requerimentos:
+O projeto tem uma construção simples e, portanto, são necessárias apenas algumas poucas dependências para a sua execução. São esperados os seguintes requerimentos:
 
 - Microsoft Visual Studio (versão 2010 ou superior)
 - SDK .NET (versão 8.0 ou superior)
@@ -34,12 +36,11 @@ O projeto tem uma construção parcialmente simples e, portanto, são necessári
 - Docker Desktop
 - IIS Express
 
-## Orientações:
-> [!WARNING]  
-> A solução publicada em ambiente de produção não está funcionando no momento. Sendo assim, na impossibilidade de consumir a solução através do [aplicativo publicado](https://spike-stone-container-app.livelysea-8a61b06e.eastus.azurecontainerapps.io), realize os passos mencionados no tópico de **execução** para validar o funcionamento da solução localmente. 
+## Utilização:
+Para consumir a API publicada, acesse [spike-stone-app](https://spike-stone-app.azurewebsites.net/swagger/index.html) e valide a solução pelo swagger.
 
-## Execução
-O projeto e suas dependências podem ser configurados de uma única vez através de um comando que executa a criação do containers. Segue passo-a-passo de como configura-los:
+## Execução local
+Para executar o projeto de maneira local é necessário que algumas configurações sejam feitas. Segue instruções de como realizá-las:
 
 **Clonar o projeto:**
 ```
@@ -68,12 +69,12 @@ docker-compose  -f "docker-compose.yml" -p "solution-spike-stone" --ansi never u
 **Criar a estrutura da base de dados:**
 1. Uma vez no Visual Studio, no terminal PowerShell do Desenvolvedor, na raiz do projeto, digite:
 ```
-dotnet clean
+dotnet clean Spike-Stone
 dotnet ef migrations add InitialCreate --project Infrastructure --startup-project Spike-Stone
 ```
 **Acessar a solução:**
-
-Após realizar essas instruções, deve ser possível consumir a solução normalmente. Para isso, acesse: http://localhost:5000/swagger/index.html
+<br><br>
+Após realizar essas instruções, deve ser possível consumir a solução normalmente. Para isso, acesse: [localhost:{port}/swagger/index.html](https://localhost:7047/swagger/index.html)
 
 ## Licença
 
