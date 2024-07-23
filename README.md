@@ -37,6 +37,9 @@ O projeto tem uma construção simples e, portanto, são necessárias apenas alg
 - IIS Express
 
 ## Utilização:
+> [!IMPORTANT]  
+> Os recursos de infraestrutura serão eventualmente desativados, portanto, caso não seja possível a utilização da API em ambiente publicado, opte por utilizá-lo localmente em seu dispositivo. As instruções para execução local estão disponíveis neste documento.
+
 Para consumir a API publicada, acesse [spike-stone-app](https://spike-stone-app.azurewebsites.net/swagger/index.html) e valide a solução pelo swagger.
 
 ## Execução local
